@@ -1,0 +1,18 @@
+ID,Title,Section,Priority,Steps
+TC-SMOKE-01,Shop is reachable and shows the sign-in page,Smoke,Critical,Open the shop home page -> Sign-in page is displayed with title Demo Shop
+TC-SMOKE-02,Demo user can sign in and see the catalog,Smoke,Critical,Sign in as demo / demo123 -> Product catalog is displayed
+TC-AUTH-01,Valid user can sign in,Authentication,High,Open the sign-in page -> Form is displayed || Enter demo / demo123 and submit -> Products page opens with Hello Demo User
+TC-AUTH-02,Wrong password shows an error,Authentication,High,Enter demo / wrong-password and submit -> Error Invalid username or password is shown and user stays on sign-in
+TC-AUTH-03,User can log out,Authentication,Medium,Sign in as demo -> Products page opens || Click Log out -> Sign-in page is displayed
+TC-AUTH-04,Protected pages redirect to sign-in,Authentication,High,Open the cart page without signing in -> User is redirected to the sign-in page
+TC-CAT-01,Catalog lists all products with prices,Catalog,Medium,Sign in -> 6 products are listed || Check the first product -> Price is $25.00
+TC-CAT-02,Search filters products by name,Catalog,Medium,Type key in the search box -> Only Mechanical Keyboard is listed
+TC-CAT-03,Search with no match shows an empty state,Catalog,Low,Type toaster in the search box -> No products listed and an empty-state message is shown
+TC-CART-01,Cart badge shows the total quantity,Cart,Medium,Add Wireless Mouse twice and USB-C Hub once -> Cart badge shows 3
+TC-CART-02,Changing quantity updates the subtotal,Cart,High,Add Wireless Mouse and open the cart -> Quantity is 1 || Click + -> Quantity is 2 and subtotal is $50.00
+TC-CART-03,Removing the last item empties the cart,Cart,Medium,Add Mechanical Keyboard and open the cart -> Item is listed || Click Remove -> Your cart is empty is shown
+TC-CART-04,Promo code SAVE10 gives 10% off,Cart,High,Add the 27 inch Monitor and open the cart -> Subtotal is $249.00 || Apply promo code save10 -> Discount is $24.90 and total is $224.10
+TC-CART-05,Unknown promo code is rejected,Cart,Medium,Apply promo code FREESTUFF -> Invalid promo code is shown and discount stays $0.00
+TC-CHK-01,Empty checkout form shows validation errors,Checkout,Critical,Go to checkout and click Place order with an empty form -> 3 validation errors are shown and no order is placed
+TC-CHK-02,Valid order shows a confirmation,Checkout,Critical,Fill name / email / address and place the order -> Confirmation page shows an ORD-xxxxxx number and total $59.00
+TC-CHK-03,Cart is empty after placing an order,Checkout,High,Place a valid order -> Cart badge shows 0

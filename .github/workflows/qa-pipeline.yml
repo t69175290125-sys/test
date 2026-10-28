@@ -1,0 +1,49 @@
+# Demo delivery pipeline.
+#
+# Job "tests" runs on GitHub's own machines and works as soon as you push.
+# Job "quality-gate" talks to QA Nerve Center. GitHub's machines cannot reach a
+# Nerve Center running on your PC (localhost), so that job runs on a
+# *self-hosted runner* installed on your PC, and only once the repository
+# variable QANC_ENABLED is set to "true" (Settings → Secrets and variables → Actions).
+# The qanc CLI is being built in Sprint 10 (S10-01/02) — until then leave it disabled.
+
+name: QA pipeline
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: Build and run Playwright tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  quality-gate:
+    name: QA Nerve Center – run regression and check release gates
+    needs: tests
+    if: vars.QANC_ENABLED == 'true'
+    runs-on: self-hosted
+    env:
+      QANC_URL: ${{ vars.QANC_URL }}            # e.g. http://localhost:4000
+      QANC_PROJECT: ${{ vars.QANC_PROJECT }}    # project ID from Nerve Center
+      QANC_TOKEN: ${{ secrets.QANC_TOKEN }}     # qanc_... API token
+    steps:
+      - name: Run the Regression job and wait for the result
+        run: qanc run "Regression" --env staging --build "1.0.${{ github.run_number }}" --wait
+      - name: Evaluate release gates (fails the pipeline if any gate fails)
+        run: qanc gates --build "1.0.${{ github.run_number }}"

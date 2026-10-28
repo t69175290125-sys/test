@@ -1,0 +1,8 @@
+﻿{
+  "bugs": {
+    "promoCode": false,
+    "cartBadge": false,
+    "checkoutValidation": false,
+    "loginError": false
+  }
+}
