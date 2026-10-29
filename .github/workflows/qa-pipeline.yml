@@ -5,7 +5,7 @@
 # Nerve Center running on your PC (localhost), so that job runs on a
 # *self-hosted runner* installed on your PC, and only once the repository
 # variable QANC_ENABLED is set to "true" (Settings → Secrets and variables → Actions).
-# The qanc CLI is being built in Sprint 10 (S10-01/02) — until then leave it disabled.
+# That machine needs the qanc CLI installed (npm install -g ./packages/cli).
 
 name: QA pipeline
 
@@ -44,6 +44,6 @@ jobs:
       QANC_TOKEN: ${{ secrets.QANC_TOKEN }}     # qanc_... API token
     steps:
       - name: Run the Regression job and wait for the result
-        run: qanc run "Regression" --env staging --build "1.0.${{ github.run_number }}" --wait
+        run: qanc run "Regression" --build "1.0.${{ github.run_number }}" --wait
       - name: Evaluate release gates (fails the pipeline if any gate fails)
-        run: qanc gates --build "1.0.${{ github.run_number }}"
+        run: qanc gates
